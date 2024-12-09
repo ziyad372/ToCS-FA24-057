@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        JAVA_HOME = tool name: 'JDK_17', type: 'JDK'
-        PATH = "${JAVA_HOME}/bin:${env.PATH}"
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -15,44 +10,16 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building...'
-                sh 'mvn clean install'
+    
+                sh 'javac Main.java'
             }
         }
 
-        stage('Test') {
+        stage('Run') {
             steps {
-                echo 'Running Tests...'
-                sh 'mvn test'
+    
+                sh 'java Main'
             }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar'
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
-                // Add your deployment steps here
-            }
-        }
-    }
-
-    post {
-        always {
-            echo 'Cleaning up...'
-            cleanWs()
-        }
-        success {
-            echo 'Pipeline succeeded!'
-        }
-        failure {
-            echo 'Pipeline failed!'
         }
     }
 }
