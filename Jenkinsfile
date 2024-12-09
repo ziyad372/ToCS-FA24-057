@@ -1,37 +1,29 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building...'
-                // Add your build steps here
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing...'
-                // Add your test steps here
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
-                // Add your deploy steps here
-            }
-        }
+    tools {
+        jdk "JDK17"
     }
 
-    post {
-        always {
-            echo 'Cleaning up...'
-            // Add your cleanup steps here
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
         }
-        success {
-            echo 'Pipeline succeeded!'
+
+        stage('Build') {
+            steps {
+    
+                sh 'javac Test.java'
+            }
         }
-        failure {
-            echo 'Pipeline failed!'
+
+        stage('Run') {
+            steps {
+    
+                sh 'java Test'
+            }
         }
     }
 }
