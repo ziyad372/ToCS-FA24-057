@@ -2,24 +2,28 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                checkout scm
+                git branch: 'main', url: 'https://github.com/ziyad372/ToCS-FA24-057.git'
             }
         }
 
         stage('Build') {
             steps {
-    
-                sh 'javac Main.java'
+                sh 'javac Test.java'
             }
         }
 
         stage('Run') {
             steps {
-    
-                sh 'java Main'
+                sh 'java Test'
             }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
         }
     }
 }
